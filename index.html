@@ -8,6 +8,7 @@
   
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
+  <script src="scripts/jquery-1.11.3.min.js"></script>
 
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,20 +16,41 @@
 </head>
 
 <body>
-
 	<div class="container-fluid">
-		<div class="title"><div class="row"><h1 class="col-lg-10">Lineup Generator</h1>
-			<div class="col-lg-2 buttons">
-				<button class="col-xs-12">cart <span>0</span></button>
-				<button class="col-xs-6">min</button>
-				<button class="col-xs-6">max</button>
+		<div class="title"><div class="row"><h1 class="col-xs-6 col-sm-8 col-md-10">
+	<div class="under"><span></span> Under</div> <div class="over"><span></span> Over</div></h1>
+			<div class="col-sm-4 col-xs-6 col-md-2 buttons">
+				
+				<div class="col-xs-12 cart">cart <span>0</span></div>
+				<div class="col-xs-12 min">min</div>
+				<div class="col-xs-12 max">max</div>
 			</div>
 		</div></div>
-		<div id="lineups" class=""></div>
+		<div id="lineups"></div>
 		<!-- <div class="col-lg-3"></div> -->
 	</div>
 
 	<script>
+
+	
+	$('.min').on('click', function () {
+		var $rows = $("#lineups .row");
+		
+	    var numericallyOrderedDivs = $rows.sort(function (a, b) {
+	        return parseInt($(a).find(".total-price span").text()) - parseInt($(b).find(".total-price span").text());
+	    });
+	    $("#lineups").html(numericallyOrderedDivs);
+	});
+
+	$('.max').on('click', function () {
+		var $rows = $("#lineups .row");
+		
+	    var numericallyOrderedDivs = $rows.sort(function (a, b) {
+	        return parseInt($(b).find(".total-price span").text()) - parseInt($(a).find(".total-price span").text());
+	    });
+	    $("#lineups").html(numericallyOrderedDivs);
+	});
+
 	// player = {
 	//     pos: ,
 	//     name: ,
@@ -47,12 +69,12 @@
 		{
 		    pos: "QB",
 		    name: "player 2",
-		    price: 5000,
+		    price: 3000,
 		    weight: .70
 		}, 
 		{
 		    pos: "QB",
-		    price: 5000,
+		    price: 2000,
 		    weight: .30
 		},
 		{
@@ -63,6 +85,7 @@
 		},
 		{
 		    pos: "RB",
+		    price: 12000,
 		    name: "rb2",
 		    weight: .25
 		},
@@ -83,11 +106,13 @@
 		},
 		{
 		    pos: "WR",
+		    price: 4500,
 		    name: "wr3",
 		    weight: .333333
 		},
 		{
 		    pos: "TE",
+		    price: 2250,
 		    name: "player 6",
 		    weight: 1
 		},
@@ -103,10 +128,11 @@
 		}
 	];
 
-	Lineup = {};
+	var Lineup = {};
+	var priceLimit = 20000;
 
 	// INIT
-	createLineup([1, 2, 3, 1, 1, 1], 12, playerPool);
+	createLineup([1, 2, 3, 1, 1, 1], 500, playerPool);
 
 	function createLineup(countParams, numLineups, playerPool) {
 	    Lineup = setLineupCounts(countParams);
@@ -117,9 +143,15 @@
 		        addPlayer(pos, Lineup[pos].length, playerPool);
 		    }
 
-		    console.log('lineup ready ', Lineup);
 		    appendToDom(Lineup);
 		}
+
+		var tot = $('#lineups .row').length;
+		var underLineups = parseInt($('.suitableLineup').length/tot * 100);
+		var overLineups = parseInt($('.unsuitableLineup').length/tot * 100);
+
+		$('.over span').text(underLineups+'%');
+		$('.under span').text(overLineups+'%');
 	}
 
 	function setLineupCounts(countParams) {
@@ -166,8 +198,6 @@
 	    	posArrayWeights.push(range);
 	    }
 
-	    console.log('weights', posArrayWeights)
-
 	    // populate final lineup
 	    while (Lineup[pos].length < count) {
 	    	var randNum = Math.random();
@@ -177,27 +207,11 @@
 	    		if (randNum >= posArrayWeights[i][0] && randNum < posArrayWeights[i][1]) {
 	    			// do not duplicate players in lineup
 	    			if (isNotInArray(posArray[i], Lineup[pos])) {
-	    				console.log('not a duplicate p');
 	    				Lineup[pos].push(posArray[i]);
 	    			}
-	    			console.log('duplicate p');
 	    		}
 	    	}
 	    }
-
-	    // choose random player from pos
-	    // add to posArray if not duplicate
-
-	    // if tot lineup price is over
-	    // if (is_over && is_over_amount > (p.cost - p.smallest.cost)) {
-	    //     removeHigherPlayer();
-	    // } else if (posArray.length === count) {
-	    //     console.log(pos + ' fulfilled.');
-	    //     return;
-	    // }
-
-	    //addPlayer(pos, count);
-
 	}
 
 	function isNotInArray(value, array) {
@@ -211,7 +225,7 @@
 
 		function drawMembers(player) {
 			var div = document.createElement("div");
-			div.setAttribute('class', 'player-template col-lg-1');
+			div.setAttribute('class', 'player-template col-xs-4 col-md-1');
 
 			var pos = document.createElement("div");
 			pos.setAttribute('class', 'position');
@@ -250,29 +264,32 @@
 		function drawTotalPrice(lineupObj) {
 			var totPrice = 0;
 			var priceDiv = document.createElement("div");
-			priceDiv.setAttribute('class', 'player-template total-price col-lg-1');
+			priceDiv.setAttribute('class', 'player-template total-price col-xs-4 col-md-1');
 
 			for (pos in lineupObj) {
 				for (var i = 0, ii = lineupObj[pos].length; i < ii; i++) {
-					console.log('price '+lineupObj[pos][i]["price"]);
-
+				
 					var price = lineupObj[pos][i]["price"];
 					if (typeof price != 'undefined') {
-						console.log('p ' + price);
+						
 						totPrice += price;
 					}
 				}
 			}
 
-			priceDiv.innerHTML = '<div class="position">$</div><span>' + totPrice + '</span>';
+			var diff = priceLimit - totPrice;
+			var plusOrMinus = (diff >=0 ) ? 'suitableLineup':'unsuitableLineup';
+
+
+			priceDiv.innerHTML = '<div class="position">$</div><span>' + totPrice + '</span>' + '<div class="'+plusOrMinus+'">'+diff+'</div>';
 			docfrag.appendChild(priceDiv);
 		}
 
 		function drawAddButton() {
 			var addDiv = document.createElement("div");
-			addDiv.setAttribute('class', 'addDiv col-lg-2');
+			addDiv.setAttribute('class', 'addDiv col-xs-8 col-md-2');
 
-			addDiv.innerHTML = '<div class="addButton"><button>Add</button></div>';
+			addDiv.innerHTML = '<div class="addButton"><div>Add</div></div>';
 			docfrag.appendChild(addDiv);
 		}
 

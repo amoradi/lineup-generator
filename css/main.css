@@ -1,17 +1,18 @@
 body {
-	background-color: #000;
+	background-color: #204663;
 	color: #fff;
 	letter-spacing: 1px;
-	text-shadow: 1px 1px 1px #000000;
+	padding-bottom: 100px;
 }
 
 .row {
-	margin-bottom: 1px;
-	background: #111;
+	margin-bottom: 0px;
+	background: #1A3B54;
+	transition: all 0.5s ease;
 }
 
 .row:nth-child(even) {
-	background: #090909;
+	background: #204663;
 }
 
 .player-template {
@@ -42,15 +43,62 @@ h1 {
 
 .title {
 	text-shadow: 0px 0px;
+	color: #222;
+}
+
+.cart {
+	line-height: 35px;
+}
+
+.suitableLineup {
 	color: green;
 }
 
-button {
+.unsuitableLineup {
+	color: red;
+}
+
+.buttons div {
 	width: 100%;
 	color: #222;
-	background: green;
+	background: #49AF78;
 	color: #fff; 
 	margin: 0px;
+	border: none;
+	margin: 2px;
+	border-radius: 4px;
+	transition: all 0.5s ease;
+	text-align: center;
+	cursor: pointer;
+}
+
+.buttons .over, .buttons .under {
+	margin: 0;
+	width: 50%;
+	background: none !important;
+	border-radius: 0;
+	text-align: center;
+	margin-bottom: 7px;
+    padding: 4px 0px;
+    font-size: 12px;
+}
+
+.buttons div:hover {
+	background: #DCB147;
+}
+
+.over, .under {
+	display: inline;
+	font-style: normal;
+}
+
+.over {
+	color: red !important;
+}
+
+.under {
+	color: #49AF78 !important;;
+	padding-right: 20px;
 }
 
 .buttons {
@@ -59,18 +107,26 @@ button {
     padding: 16px;
     background: #fff;
     z-index: 99;
+    border-bottom-left-radius: 4px;
 }
 
-.addButton button {
-	background: blue;
+.addButton div {
+	background: #49AF78;
 	border: none;
+    margin-top: 35px;
+    width: 50%;
+    margin: 35px auto;
+    display: block;
+    font-size: 12px;
+    border-radius: 4px;
+    text-align: center;
 }
 
 #lineups .row:hover {
-	background: #222;
+	background: #272F35;;
 	cursor: pointer;
 }
 
-#lineups .row:hover .addButton button {
-	background: lightblue;
+#lineups .row:hover .addButton div {
+	background: #DCB147;
 }
