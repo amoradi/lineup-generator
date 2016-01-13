@@ -17,13 +17,16 @@
 
 <body>
 	<div class="container-fluid">
-		<div class="title"><div class="row"><h1 class="col-xs-6 col-sm-8 col-md-10">
-	<div class="under"><span></span> Under</div> <div class="over"><span></span> Over</div></h1>
-			<div class="col-sm-4 col-xs-6 col-md-2 buttons">
+		<div class="title"><div class="row">
+			<div class="col-xs-12">
+				<div class="under col-xs-6 col-md-1"><span></span> under</div>
+				<div class="over col-xs-6 col-md-1"><span></span> over</div>
+			
 				
-				<div class="col-xs-12 cart">cart <span>0</span></div>
-				<div class="col-xs-12 min">min</div>
-				<div class="col-xs-12 max">max</div>
+				<div class="col-xs-12 col-md-8 cart">cart <span>0</span></div>
+
+				<div class="col-xs-6 col-md-1 min">min</div>
+				<div class="col-xs-6 col-md-1 max">max</div>
 			</div>
 		</div></div>
 		<div id="lineups"></div>
@@ -49,6 +52,11 @@
 	        return parseInt($(b).find(".total-price span").text()) - parseInt($(a).find(".total-price span").text());
 	    });
 	    $("#lineups").html(numericallyOrderedDivs);
+	});
+
+	$(document).on('click', '.revealButton', function (e) {
+		console.log(e.target);
+		$(e.target).parents('.row').toggleClass('reveal-data');
 	});
 
 	// cart download | Export div contents to txt file
@@ -296,10 +304,18 @@
 
 		function drawAddButton() {
 			var addDiv = document.createElement("div");
-			addDiv.setAttribute('class', 'addDiv col-xs-8 col-md-2');
+			addDiv.setAttribute('class', 'addDiv col-xs-3 col-md-1');
 
-			addDiv.innerHTML = '<div class="addButton"><div>Add</div></div>';
+			addDiv.innerHTML = '<div class="addButton"><div>add</div></div>';
 			docfrag.appendChild(addDiv);
+		}
+
+		function drawRevealButton() {
+			var revealDiv = document.createElement("div");
+			revealDiv.setAttribute('class', 'reveal col-xs-3 col-md-1');
+
+			revealDiv.innerHTML = '<div class="revealButton"><div>reveal</div></div>';
+			docfrag.appendChild(revealDiv);
 		}
 
 		drawPostion("QB");
@@ -309,6 +325,7 @@
 		drawPostion("K");
 		drawPostion("D");
 		drawTotalPrice(lineup);
+		drawRevealButton();
 		drawAddButton();
 
 		row.appendChild(docfrag);

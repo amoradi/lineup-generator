@@ -1,28 +1,97 @@
+/*
+gray
+#5c6469
+
+dk gray 
+#44494c
+
+blue text
+#36b7c5
+
+light gray text
+#bdc5cb
+
+green
+#54af7a
+
+red pink
+#e85757
+
+*/
+
+@font-face {
+    font-family: 'open_sansbold';
+    src: url('../fonts/opensans-bold-webfont.eot');
+    src: url('../fonts/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-bold-webfont.woff2') format('woff2'),
+         url('../fonts/opensans-bold-webfont.woff') format('woff'),
+         url('../fonts/opensans-bold-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('../fonts/opensans-regular-webfont.eot');
+    src: url('../fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-regular-webfont.woff2') format('woff2'),
+         url('../fonts/opensans-regular-webfont.woff') format('woff'),
+         url('../fonts/opensans-regular-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanssemibold';
+    src: url('../fonts/opensans-semibold-webfont.eot');
+    src: url('../fonts/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-semibold-webfont.woff2') format('woff2'),
+         url('../fonts/opensans-semibold-webfont.woff') format('woff'),
+         url('../fonts/opensans-semibold-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-semibold-webfont.svg#open_sanssemibold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-	background-color: #204663;
+	font-family: 'open_sansregular';
+	background-color: #5c6469;
 	color: #fff;
 	letter-spacing: 1px;
 	padding-bottom: 100px;
+	text-transform: lowercase;
+	padding-top: 60px;
 }
 
 .row {
 	margin-bottom: 0px;
-	background: #1A3B54;
+	background: #5c6469;
+	background: #222;
 	transition: all 0.5s ease;
 }
 
-.row:nth-child(even) {
-	background: #204663;
+.row.reveal-data {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background: #111 !important;
 }
 
-.player-template {
+.row:nth-child(even) {
+	/*background: #6d757b;*/
+}
+
+.player-template,
+.addDiv, 
+.reveal {
 	padding: 10px 20px 7.5px;
 	font-size: 11px;
 }
 
 .player-template .position {
 	font-weight: 700;
-	font-style: italic;
+	/*font-style: italic;*/
 	font-size: 11px;
 	padding-bottom: 5px;
 }
@@ -37,96 +106,74 @@ h1 {
 	font-weight: 700;
 }
 
-.title .row {
-	background: #fff;
+.title {
+	position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 999;
 }
 
-.title {
-	text-shadow: 0px 0px;
-	color: #222;
+.title .row {
+	background: #272F35;
+	background: #222;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .cart {
-	line-height: 35px;
+	text-align: center;
+}
+
+.position {
+	color: #36b7c5;
+}
+
+.team,
+.price,
+.weight {
+	display: none;
+}
+
+.reveal-data .team,
+.reveal-data .price,
+.reveal-data .weight {
+	display: block;
 }
 
 .suitableLineup {
-	color: green;
+	color: #54af7a;
 }
 
 .unsuitableLineup {
-	color: red;
-}
-
-.buttons div {
-	width: 100%;
-	color: #222;
-	background: #49AF78;
-	color: #fff; 
-	margin: 0px;
-	border: none;
-	margin: 2px;
-	border-radius: 4px;
-	transition: all 0.5s ease;
-	text-align: center;
-	cursor: pointer;
-}
-
-.buttons .over, .buttons .under {
-	margin: 0;
-	width: 50%;
-	background: none !important;
-	border-radius: 0;
-	text-align: center;
-	margin-bottom: 7px;
-    padding: 4px 0px;
-    font-size: 12px;
-}
-
-.buttons div:hover {
-	background: #DCB147;
-}
-
-.over, .under {
-	display: inline;
-	font-style: normal;
+	color: #e85757;
 }
 
 .over {
-	color: red !important;
+	color: #e85757;
 }
 
 .under {
-	color: #49AF78 !important;;
-	padding-right: 20px;
+	color: #49AF78;
 }
 
-.buttons {
-	position: fixed;
-    right: 0;
-    padding: 16px;
-    background: #fff;
-    z-index: 99;
-    border-bottom-left-radius: 4px;
-}
-
-.addButton div {
+.addButton div,
+.revealButton div {
 	background: #49AF78;
 	border: none;
-    margin-top: 35px;
-    width: 50%;
-    margin: 35px auto;
     display: block;
     font-size: 12px;
-    border-radius: 4px;
+   /* border-radius: 4px;*/
     text-align: center;
 }
 
 #lineups .row:hover {
-	background: #272F35;;
+	background: #44494c;
+	background: #191919;
 	cursor: pointer;
 }
 
-#lineups .row:hover .addButton div {
-	background: #DCB147;
+#lineups .row:hover .addButton div,
+#lineups .row:hover .revealButton div {
+	background: #36b7c5;
 }
