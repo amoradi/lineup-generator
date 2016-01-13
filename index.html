@@ -17,16 +17,16 @@
 
 <body>
 	<div class="container-fluid">
+
 		<div class="title"><div class="row">
 			<div class="col-xs-12">
-				<div class="under col-xs-6 col-md-1"><span></span> under</div>
-				<div class="over col-xs-6 col-md-1"><span></span> over</div>
-			
 				
-				<div class="col-xs-12 col-md-8 cart">cart <span>0</span></div>
-
-				<div class="col-xs-6 col-md-1 min">min</div>
-				<div class="col-xs-6 col-md-1 max">max</div>
+				<div class="col-xs-12 col-md-12 upload-panel"><input type="file" class="upload-players" /></div>
+				<div class="col-xs-12 col-md-12 nav-content">
+				
+					<span class="under"><span></span> under</span>
+					<span class="over"><span></span> over</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="cart">keepers (<span>0</span>)&nbsp;&nbsp;|&nbsp;&nbsp;<span class="download-keepers">download</span>&nbsp;&nbsp;<span class="upload-players">upload</span></span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="min">min</span>&nbsp;&nbsp;<span class="max">max</span>
+				</div>
 			</div>
 		</div></div>
 		<div id="lineups"></div>
@@ -55,8 +55,16 @@
 	});
 
 	$(document).on('click', '.revealButton', function (e) {
-		console.log(e.target);
-		$(e.target).parents('.row').toggleClass('reveal-data');
+		var rowParent = $(e.target).parents('.row'),
+			revealBut = rowParent.find('.revealButton > div');
+
+		rowParent.toggleClass('reveal-data');
+		if (rowParent.hasClass('reveal-data')) {
+			revealBut.text('hide');
+		} else {
+			revealBut.text('reveal');
+		}
+
 	});
 
 	// cart download | Export div contents to txt file
