@@ -23,13 +23,38 @@
 				
 				<div class="col-xs-12 col-md-12 upload-panel"><input type="file" class="upload-players" /></div>
 				<div class="col-xs-12 col-md-12 nav-content">
-				
-					<span class="under"><span></span> under</span>
+					<span class="lineupsGenerated"></span>
+					<span class="lineupLimit"></span>
+					<span class="under"><span></span> under&nbsp;&nbsp;</span>
 					<span class="over"><span></span> over</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="cart">keepers (<span>0</span>)&nbsp;&nbsp;|&nbsp;&nbsp;<span class="download-keepers">download</span>&nbsp;&nbsp;<span class="upload-players">upload</span></span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="min">min</span>&nbsp;&nbsp;<span class="max">max</span>
 				</div>
 			</div>
 		</div></div>
-		<div id="lineups"></div>
+		<div id="lineups">
+			
+<h1 class="input-lineup">lineup generator</h1>
+			<textarea class="input-lineup playerPool" placeholder='
+			add players array like so:
+
+	[
+		{
+		    pos: "QB",
+		    name: "Robert Griffin III",
+		    team: "Redskins"
+		    price: 1000,
+		    weight: 0.3
+		},
+		{
+		    pos: "QB",
+		    name: "Tim Tebow",
+		    price: 1500,
+		    weight: 0.70
+		}
+	]' rows="25"></textarea>
+			<input class="input-lineup lineupNum" type="text" placeholder="enter number of lineups" />
+			<input class="input-lineup lineupBudget" type="text" placeholder="enter lineup budget" />
+			<span class="input-lineup generate-lineups"><span>generate lineups</span></span>
+		</div>
 		<!-- <div class="col-lg-3"></div> -->
 	</div>
 
@@ -67,6 +92,20 @@
 
 	});
 
+	$('.generate-lineups').on('click', function() {
+		var pp = JSON.parse($(".input-lineup.playerPool").val());
+		var lpNum = parseInt($(".lineupNum").val());
+		priceLimit = parseInt($(".lineupBudget").val());
+
+		$('.lineupsGenerated').html(lpNum + ' lineups generated&nbsp;&nbsp;|&nbsp;&nbsp;');
+		$('.lineupLimit').html('$'+priceLimit+ ' budget&nbsp;&nbsp;|&nbsp;&nbsp;');
+		createLineup([1, 2, 3, 1, 1, 1], lpNum, pp);
+	});
+
+	var Lineup = {};
+	
+	var priceLimit = 20000;
+
 	// cart download | Export div contents to txt file
 	// http://stackoverflow.com/questions/22084698/how-to-export-source-content-within-div-to-text-html-file
 	
@@ -84,90 +123,89 @@
 	//     weight:
 	// };
 
-	playerPool = [
-		{
-		    pos: "QB",
-		    name: "player 1",
-		    price: 5000,
-		    weight: 0
-		},
-		{
-		    pos: "QB",
-		    name: "player 2",
-		    price: 3000,
-		    weight: .70
-		}, 
-		{
-		    pos: "QB",
-		    price: 2000,
-		    weight: .30
-		},
-		{
-		    pos: "RB",
-		    name: "rb1",
-		    price: 5000,
-		    weight: .5
-		},
-		{
-		    pos: "RB",
-		    price: 12000,
-		    name: "rb2",
-		    weight: .25
-		},
-		{
-		    pos: "RB",
-		    name: "rb3",
-		    weight: .25
-		},
-		{
-		    pos: "WR",
-		    name: "player 4",
-		    weight: .333333
-		},
-		{
-		    pos: "WR",
-		    name: "player 5",
-		    weight: .333333
-		},
-		{
-		    pos: "WR",
-		    price: 4500,
-		    name: "wr3",
-		    weight: .333333
-		},
-		{
-		    pos: "TE",
-		    price: 2250,
-		    name: "player 6",
-		    weight: 1
-		},
-		{
-		    pos: "K",
-		    name: "player 7",
-		    weight: 1
-		},
-		{
-		    pos: "D",
-		    name: "player 8",
-		    weight: 1
-		}
-	];
+	// PlayerPool = [
+	// 	{
+	// 	    "pos": "QB",
+	// 	    "name": "player 1",
+	// 	    "price": 5000,
+	// 	    "weight": 0
+	// 	},
+	// 	{
+	// 	    "pos": "QB",
+	// 	    "name": "player 2",
+	// 	    "price": 3000,
+	// 	    "weight": 0.70
+	// 	}, 
+	// 	{
+	// 	    "pos": "QB",
+	// 	    "price": 2000,
+	// 	    "weight": 0.30
+	// 	},
+	// 	{
+	// 	    "pos": "RB",
+	// 	    "name": "rb1",
+	// 	    "price": 5000,
+	// 	    "weight": 0.5
+	// 	},
+	// 	{
+	// 	    "pos": "RB",
+	// 	    "price": 12000,
+	// 	    "name": "rb2",
+	// 	    "weight": 0.25
+	// 	},
+	// 	{
+	// 	    "pos": "RB",
+	// 	    "name": "rb3",
+	// 	    "weight": 0.25
+	// 	},
+	// 	{
+	// 	    "pos": "WR",
+	// 	    "name": "player 4",
+	// 	    "weight": 0.333333
+	// 	},
+	// 	{
+	// 	    "pos": "WR",
+	// 	    "name": "player 5",
+	// 	    "weight": 0.333333
+	// 	},
+	// 	{
+	// 	    "pos": "WR",
+	// 	    "price": 4500,
+	// 	    "name": "wr3",
+	// 	    "weight": 0.333333
+	// 	},
+	// 	{
+	// 	    "pos": "TE",
+	// 	    "price": 2250,
+	// 	    "name": "player 6",
+	// 	    "weight": 1
+	// 	},
+	// 	{
+	// 	    "pos": "K",
+	// 	    "name": "player 7",
+	// 	    "weight": 1
+	// 	},
+	// 	{
+	// 	    "pos": "D",
+	// 	    "name": "player 8",
+	// 	    "weight": 1
+	// 	}
+	// ];
 
-	var Lineup = {};
-	var priceLimit = 20000;
 
 	// INIT
-	createLineup([1, 2, 3, 1, 1, 1], 500, playerPool);
+	//createLineup([1, 2, 3, 1, 1, 1], 500, playerPool);
 
 	function createLineup(countParams, numLineups, playerPool) {
 	    Lineup = setLineupCounts(countParams);
+	    $('#lineups').empty();
 
 	    for (var i = 0, ii = numLineups; i < ii; i++) {
 		    // add players for each position
 		    for (pos in Lineup) {
 		        addPlayer(pos, Lineup[pos].length, playerPool);
 		    }
-
+		    
 		    appendToDom(Lineup);
 		}
 
@@ -175,8 +213,8 @@
 		var underLineups = parseInt($('.suitableLineup').length/tot * 100);
 		var overLineups = parseInt($('.unsuitableLineup').length/tot * 100);
 
-		$('.over span').text(underLineups+'%');
-		$('.under span').text(overLineups+'%');
+		$('.under span').text(underLineups+'%');
+		$('.over span').text(overLineups+'%');
 	}
 
 	function setLineupCounts(countParams) {
@@ -254,27 +292,27 @@
 
 			var pos = document.createElement("div");
 			pos.setAttribute('class', 'position');
-			pos.innerHTML = player.pos;
+			pos.innerHTML = (player.pos || '');
 			div.appendChild(pos);
 
 			var name = document.createElement("div");
 			name.setAttribute('class', 'name');
-			name.innerHTML = player.name;
+			name.innerHTML = (player.name || '');
  			div.appendChild(name);
 
  			var team = document.createElement("div");
 			team.setAttribute('class', 'team');
-			team.innerHTML = player.team;
+			team.innerHTML = (player.team || '');
  			div.appendChild(team);
 
  			var price = document.createElement("div");
 			price.setAttribute('class', 'price');
-			price.innerHTML = player.price;
+			price.innerHTML = (player.price || '');
  			div.appendChild(price);
 
  			var weight = document.createElement("div");
 			weight.setAttribute('class', 'weight');
-			weight.innerHTML = player.weight;
+			weight.innerHTML = (player.weight || '');
  			div.appendChild(weight);
 
  			docfrag.appendChild(div);
