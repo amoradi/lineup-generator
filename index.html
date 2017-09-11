@@ -1,0 +1,53 @@
+<html>
+<head>
+  <style>
+    body { text-align: center; background-color: #333 !important; } 
+    #fileName { margin: 7px 0 20px auto; text-align: center; font-size: 18px; }
+    [for="fileName"] { margin-top: 20px; color: #fff; display: block; } 
+    .CreateCsv { border: 0; background-color: aquamarine; padding: 10px 20px; font-size: 18px; margin-bottom: 40px;} 
+  </style>
+
+  <!-- Demo styling -->
+  <link href="tablesorter-master/docs/css/jq.css" rel="stylesheet">
+
+  <!-- jQuery: required (tablesorter works with jQuery 1.2.3+) -->
+  <script src="tablesorter-master/docs/js/jquery-1.2.6.min.js"></script>
+
+  <!-- Pick a theme, load the plugin & initialize plugin -->
+  <link href="tablesorter-master/dist/css/theme.default.min.css" rel="stylesheet">
+  <script src="tablesorter-master/dist/js/jquery.tablesorter.min.js"></script>
+  <script src="tablesorter-master/dist/js/jquery.tablesorter.widgets.min.js"></script>
+  <script>
+  $(function(){
+    $('#lineups').tablesorter({
+      widgets        : ['zebra', 'columns'],
+      usNumberFormat : false,
+      sortReset      : true,
+      sortRestart    : true
+    });
+  });
+  </script>
+</head>
+<body>
+  <label for="fileName" >File Name</label>
+  <input id="fileName" />
+  <table id="lineups" class="tablesorter">
+  <thead><tr><th>QB</th>
+  <th>RB</th>
+  <th>RB</th>
+  <th>WR</th>
+  <th>WR</th>
+  <th>WR</th>
+  <th>TE</th>
+  <th>K</th>
+  <th>D</th>
+  <th>COST</th>
+  </tr></thead>
+  <tbody></tbody>
+  </table>
+
+<button class="CreateCsv" onclick="downloadCSV(document.querySelector('#fileName').value);">Download CSV</button>
+
+<script src="dist/bundle.js"></script>
+</body>
+</html>
