@@ -1,23 +1,22 @@
 import players from './players.js';
+import selectedPlayers from './selected_players.js';
 
-var playerNames = ["Cam Newton", "Le'Veon Bell", "Eddie Lacy", "Paul Richardson", "Randall Cobb", "David Johnson", "Carlos Hyde", "David Johnson", "Devonta Freeman", "LeSean McCoy", "DeMarco Murray", "Dan Bailey", "Matt Bryant", "Ryan Succop", "Tyler Eifert", "Julio Jones", "A.J. Green", "Jordy Nelson", "Marvin Jones Jr.", "Julio Jones", "Kelvin Benjamin", "Jason Witten", "Jordan Reed", "Larry Fitzgerald", "Pierre Garcon", "Ty Montgomery", "Doug Baldwin", "Corey Coleman", "Torrey Smith", "Tyler Eifert", "Delanie Walker", "San Francisco 49ers"];
-
-function createPlayerPool(players="", playerPoolNames = []) {
+function createPlayerPool(players = "", playerPoolNames = []) {
     var playerPool = playerPoolNames.map(function(name) {
-      return players.find(function(player) {
-        return player["Nickname"] === name;
-      });
+        return players.find(function(player) {
+            return player["Nickname"] === name;
+        });
     });
-
+    console.dir(playerPool);
     return playerPool;
 }
 
 function createLineups(numberOfLineups = 2, playerPool, salary, positions = ["QB", "RB", "WR", "TE", "K", "D"]) {
     var lineups = [];
     var posSegmentedPlayerPool = {};
-    
+
     positions.forEach((pos) => {
-      posSegmentedPlayerPool[pos] = playerPool.filter(filterByPosition, pos);
+        posSegmentedPlayerPool[pos] = playerPool.filter(filterByPosition, pos);
     });
 
     while (lineups.length < numberOfLineups) {
@@ -35,13 +34,13 @@ function createLineups(numberOfLineups = 2, playerPool, salary, positions = ["QB
         // construct lineup
         lineup.QB = qb.player;
         lineup.RB = [
-          rb1.player,
-          rb2.player
+            rb1.player,
+            rb2.player
         ];
         lineup.WR = [
-          wr1.player,
-          wr2.player,
-          wr3.player
+            wr1.player,
+            wr2.player,
+            wr3.player
         ];
         lineup.TE = te.player;
         lineup.K = k.player;
@@ -51,21 +50,22 @@ function createLineups(numberOfLineups = 2, playerPool, salary, positions = ["QB
         var lineupArray = Object.values(lineup);
         var lineupCost = 0;
 
+        console.dir(lineupArray);
         lineupArray.forEach((pos) => {
 
-          if (Array.isArray(pos)) {
-            pos.forEach((player) => {
-              lineupCost += parseInt(player["Salary"]);
-            }); 
-          } else {
-            lineupCost += parseInt(pos["Salary"]);
-          }
+            if (Array.isArray(pos)) {
+                pos.forEach((player) => {
+                    lineupCost += parseInt(player["Salary"]);
+                });
+            } else {
+                lineupCost += parseInt(pos["Salary"]);
+            }
         });
 
         lineup["cost"] = lineupCost;
 
-        if (lineupCost <= salary && !lineups.includes(lineup)) {
-          lineups.push(lineup);
+        if (lineupCost <= salary && lineupCost >= (salary - 500) && !lineups.includes(lineup) && lineup.WR[0].Nickname === "Antonio Brown") {
+            lineups.push(lineup);
         }
 
     }
@@ -74,35 +74,35 @@ function createLineups(numberOfLineups = 2, playerPool, salary, positions = ["QB
 }
 
 function getRandomElem(myArray, takenPlayer, takenPlayer2) {
-  var randPos = Math.floor(Math.random() * myArray.length);
+    var randPos = Math.floor(Math.random() * myArray.length);
 
-  if (takenPlayer !== undefined) {
-    if (takenPlayer2 !== undefined) {
-      while (randPos === takenPlayer || randPos === takenPlayer2) {
-        randPos = Math.floor(Math.random() * myArray.length);
-      }
-    } else {
-      while (randPos === takenPlayer) {
-        randPos = Math.floor(Math.random() * myArray.length);
-      }
+    if (takenPlayer !== undefined) {
+        if (takenPlayer2 !== undefined) {
+            while (randPos === takenPlayer || randPos === takenPlayer2) {
+                randPos = Math.floor(Math.random() * myArray.length);
+            }
+        } else {
+            while (randPos === takenPlayer) {
+                randPos = Math.floor(Math.random() * myArray.length);
+            }
+        }
     }
-  }
 
-  return { 
-    player: myArray[randPos],
-    takenPlayer: randPos
-  };
+    return {
+        player: myArray[randPos],
+        takenPlayer: randPos
+    };
 }
 
 function filterByPosition(player) {
-  if (player) return player["Position"] === this.toString();
+    if (player) return player["Position"] === this.toString();
 }
 
 function drawLineups(lineups) {
-  var lineupsTable = document.querySelector('#lineups tbody');
+    var lineupsTable = document.querySelector('#lineups tbody');
 
-  lineups.forEach((lineup) => {
-    var tr = `<tr>
+    lineups.forEach((lineup) => {
+        var tr = `<tr>
         <td>${lineup.QB.Nickname}</td>
         <td>${lineup.RB[0].Nickname}</td>
         <td>${lineup.RB[1].Nickname}</td>
@@ -126,27 +126,27 @@ function drawLineups(lineups) {
           ]}" /></td>
       </tr>`;
 
-    lineupsTable.insertAdjacentHTML('beforeend', tr);
-  });
+        lineupsTable.insertAdjacentHTML('beforeend', tr);
+    });
 }
 
-var playerPool = createPlayerPool(players, playerNames);
+var playerPool = createPlayerPool(players, selectedPlayers);
 
-drawLineups(createLineups(20, playerPool, 60000));
+drawLineups(createLineups(120, playerPool, 60000));
 
-window.downloadCSV = (fileName="player_bunch") => {
-  var link, data, filename;
-  var lineupArray = ["data:text/csv;charset=utf-8, QB, RB, RB, WR, WR, WR, TE, K, D"];
+window.downloadCSV = (fileName = "player_bunch") => {
+    var link, data, filename;
+    var lineupArray = ["data:text/csv;charset=utf-8, QB, RB, RB, WR, WR, WR, TE, K, D"];
 
-  document.querySelectorAll(":checked").forEach(function (lineup, index) {
-      lineupArray.push(lineup.value);
-  });
+    document.querySelectorAll(":checked").forEach(function(lineup, index) {
+        lineupArray.push(lineup.value);
+    });
 
-  var csvContent = lineupArray.join("\n");
+    var csvContent = lineupArray.join("\n");
 
-  data = encodeURI(csvContent);
-  link = document.createElement('a');
-  link.setAttribute('href', data);
-  link.setAttribute('download', fileName);
-  link.click();
+    data = encodeURI(csvContent);
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', fileName);
+    link.click();
 }
