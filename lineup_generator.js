@@ -64,7 +64,7 @@ function createLineups(numberOfLineups = 2, playerPool, salary, positions = ["QB
 
         lineup["cost"] = lineupCost;
 
-        if (lineupCost <= salary && lineupCost >= (salary - 500) && !lineups.includes(lineup) && lineup.WR[0].Nickname === "Antonio Brown") {
+        if (lineupCost <= salary && lineupCost >= (salary - 500) && !lineups.includes(lineup)) {
             lineups.push(lineup);
         }
 
